@@ -27,7 +27,6 @@
 //
 
 import Foundation
-import SwiftWebSocket
 import XCGLogger
 
 let log = XCGLogger(identifier: "DDP")
@@ -159,7 +158,7 @@ open class DDPClient: NSObject {
         let numbers = Set<Character>(["0","1","2","3","4","5","6","7","8","9"])
         let uuid = UUID().uuidString.replacingOccurrences(of: "-", with: "")
         var id = ""
-        for character in uuid.characters {
+        for character in uuid {
             if (!numbers.contains(character) && (round(Float(arc4random()) / Float(UINT32_MAX)) == 1)) {
                 id += String(character).lowercased()
             } else {
@@ -257,7 +256,7 @@ open class DDPClient: NSObject {
     // Parse DDP messages and dispatch to the appropriate function
     internal func ddpMessageHandler(_ message: DDPMessage) throws {
         
-        log.debug("Received message: \(message.json)")
+        log.debug("Received message: \(String(describing: message.json))")
         
         switch message.type {
             
@@ -333,7 +332,7 @@ open class DDPClient: NSObject {
             self.didReceiveErrorMessage(DDPError(json: message.json))
             }
             
-        default: log.error("Unhandled message: \(message.json)")
+        default: log.error("Unhandled message: \(String(describing: message.json))")
             
         }
     }
